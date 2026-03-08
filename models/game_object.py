@@ -1,6 +1,6 @@
 """
-GameObject.py - Person 5's kod
-Fungerar med Person 4's Game och InteractionController
+GameObject.py - hala kod
+Fungerar med zahra Game och InteractionController
 """
 
 
