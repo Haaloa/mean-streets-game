@@ -275,7 +275,7 @@ For questions about this project, contact any team member.
 
 ## Current Status
 
-**Project Completion:** 20%
+**Project Completion:** 0%
 
 - [ ] Project structure created
 - [ ] GameObject implemented (Person 5)
