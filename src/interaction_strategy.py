@@ -1,8 +1,13 @@
-
 from abc import ABC, abstractmethod
 
 
 class InteractionStrategy(ABC):
+    """
+    Abstract base class for the Strategy Pattern.
+    All concrete strategies must implement interact(obj).
+    needs_options() returns True if the strategy requires extra input (e.g. direction).
+    """
+
     @abstractmethod
     def interact(self, obj):
         pass
@@ -10,162 +15,73 @@ class InteractionStrategy(ABC):
     def needs_options(self):
         return False
 
-    # Alias för klassdiagrammet
-    def doIt(self, obj):
-        return self.interact(obj)
-
-    def needMoreInfo(self):
-        return self.needs_options()
-
-    def askForMoreInfo(self):
-        return ""
-
 
 class LookAtStrategy(InteractionStrategy):
+    """Look at an object - shows its description and current state."""
+
     def interact(self, obj):
         extra = ""
         if hasattr(obj, "is_on"):
             extra = " It is currently " + ("on." if obj.is_on else "off.")
-        return f"You look at the {obj.name}. {obj.description}{extra}"
+        return f"You look at {obj.name}. {obj.description}{extra}"
 
 
 class OpenItStrategy(InteractionStrategy):
+    """Open an object."""
+
     def interact(self, obj):
-        return f"You open the {obj.name}."
+        return f"You open {obj.name}."
 
 
 class MoveItStrategy(InteractionStrategy):
-    def __init__(self):
-        self.options = ""
+    """Move an object - requires a direction as extra input."""
 
-    def set_options(self, val):
-        self.options = val
+    def __init__(self):
+        self._direction = ""
 
     def needs_options(self):
         return True
 
-    def askForMoreInfo(self):
-        return "Which direction?"
-
-    # Alias för klassdiagrammet
-    def setDirection(self, direction):
-        self.set_options(direction)
+    def set_options(self, direction):
+        self._direction = direction
 
     def interact(self, obj):
-        direction = f" {self.options}" if self.options else ""
-        return f"You move the {obj.name}{direction}."
+        direction = f" {self._direction}" if self._direction else ""
+        return f"You move {obj.name}{direction}."
 
 
 class TurnItOnStrategy(InteractionStrategy):
+    """Turn on an object - sets is_on to True."""
+
     def interact(self, obj):
         obj.is_on = True
-        return f"You turn on the {obj.name}."
+        return f"You turn on {obj.name}."
 
 
 class TurnItOffStrategy(InteractionStrategy):
+    """Turn off an object - sets is_on to False."""
+
     def interact(self, obj):
         obj.is_on = False
-        return f"You turn off the {obj.name}."
+        return f"You turn off {obj.name}."
 
 
 class TasteItStrategy(InteractionStrategy):
+    """Taste an object."""
+
     def interact(self, obj):
-        return f"You taste the {obj.name}. Weird choice."
+        return f"You taste {obj.name}. An unusual choice."
 
 
 class PickItUpStrategy(InteractionStrategy):
+    """Pick up an object."""
+
     def interact(self, obj):
-        return f"You pick up the {obj.name}."
+        return f"You pick up {obj.name}."
 
 
 class DropItStrategy(InteractionStrategy):
+    """Drop an object."""
+
     def interact(self, obj):
-        return f"You drop the {obj.name} on the ground."
-    
-# from abc import ABC, abstractmethod
-
-
-# class InteractionStrategy(ABC):
-#     @abstractmethod
-#     def do_it(self, obj):
-#         pass
-
-#     @abstractmethod
-#     def needs_more_info(self):
-#         pass
-
-
-# class LookAtStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         extra = ""
-#         if hasattr(obj, "is_on"):
-#             extra = " It is currently " + ("on." if obj.is_on else "off.")
-#         return f"You look at the {obj.name}. {obj.description}{extra}"
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class OpenItStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         return f"You open the {obj.name}."
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class MoveItStrategy(InteractionStrategy):
-#     def __init__(self):
-#         self.options = ""
-
-#     def set_options(self, val):
-#         self.options = val
-
-#     def do_it(self, obj):
-#         dir = f" {self.options}" if self.options else ""
-#         return f"You move the {obj.name}{dir}."
-
-#     def needs_more_info(self):
-#         return True
-
-
-# class TurnItOnStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         obj.is_on = True
-#         return f"You turn on the {obj.name}."
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class TurnItOffStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         obj.is_on = False
-#         return f"You turn off the {obj.name}."
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class TasteItStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         return f"You taste the {obj.name}. Weird choice."
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class PickItUpStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         return f"You pick up the {obj.name}."
-
-#     def needs_more_info(self):
-#         return False
-
-
-# class DropItStrategy(InteractionStrategy):
-#     def do_it(self, obj):
-#         return f"You drop the {obj.name} on the ground."
-
-#     def needs_more_info(self):
-#         return False
+        return f"You drop {obj.name} on the ground."
