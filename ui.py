@@ -22,7 +22,7 @@ def show_scene(game):
         _print("You are nowhere.")
         return
 
-    _header(f"📍 {scene.name}")
+    _header(f" {scene.name}")
     _print(scene.description)
 
     objects = scene.show_available_things()
@@ -163,7 +163,7 @@ def interact_with_character(game):
 
 
 def show_inventory(game):
-    _header("🎒 Inventory")
+    _header(" Inventory")
     inv = game.inventory
 
     if inv.is_empty():
