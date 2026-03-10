@@ -12,8 +12,8 @@ class Scene:
         if obj in self._objects:
             self._objects.remove(obj)
 
-    def add_character(self, c):
-        self._characters.append(c)
+    def add_character(self, character):
+        self._characters.append(character)
 
     def show_available_things(self):
         return list(self._objects)
@@ -22,26 +22,17 @@ class Scene:
         return list(self._characters)
 
     def is_thing_here(self, name):
-        for o in self._objects:
-            if o.name == name:
-                return True
-        return False
+        return any(obj.name == name for obj in self._objects)
 
     def find_object(self, name):
         for obj in self._objects:
             if obj.name == name:
                 return obj
         return None
+    
 
-    def is_available(self, element_name):
-        for o in self._objects:
-            if o.name == element_name:
-                return True
-        for c in self._characters:
-            if c.name == element_name:
-                return True
-        return False
 
+    
 
 # class Scene:
 #     def __init__(self, name, description=""):

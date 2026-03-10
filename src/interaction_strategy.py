@@ -10,6 +10,16 @@ class InteractionStrategy(ABC):
     def needs_options(self):
         return False
 
+    # Alias för klassdiagrammet
+    def doIt(self, obj):
+        return self.interact(obj)
+
+    def needMoreInfo(self):
+        return self.needs_options()
+
+    def askForMoreInfo(self):
+        return ""
+
 
 class LookAtStrategy(InteractionStrategy):
     def interact(self, obj):
@@ -33,6 +43,13 @@ class MoveItStrategy(InteractionStrategy):
 
     def needs_options(self):
         return True
+
+    def askForMoreInfo(self):
+        return "Which direction?"
+
+    # Alias för klassdiagrammet
+    def setDirection(self, direction):
+        self.set_options(direction)
 
     def interact(self, obj):
         direction = f" {self.options}" if self.options else ""

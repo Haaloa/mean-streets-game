@@ -1,4 +1,3 @@
-
 class InteractionController:
     def __init__(self, game):
         self._game = game
@@ -21,25 +20,37 @@ class InteractionController:
     def get_interaction_types(self):
         if self._selected_object is None:
             return []
-        return [type(strategy).__name__ for strategy in self._selected_object.what_can_i_do()]
 
-    def choose_interaction(self, type_name):
+        return [
+            type(strategy).__name__
+            for strategy in self._selected_object.what_can_i_do()
+        ]
+
+    def choose_interaction(self, interaction_type):
         if self._selected_object is None:
             return False
 
         for strategy in self._selected_object.what_can_i_do():
-            if strategy.__class__.__name__ == type_name:
+            if strategy.__class__.__name__ == interaction_type:
                 self._selected_strategy = strategy
                 return True
 
         return False
 
-    def provide_options(self, options):
+    def provide_options(self, user_input):
         if self._selected_strategy is None:
             return False
 
+        # Stöd för snake_case-version
         if hasattr(self._selected_strategy, "needs_options") and self._selected_strategy.needs_options():
-            self._selected_strategy.set_options(options)
+            if hasattr(self._selected_strategy, "set_options"):
+                self._selected_strategy.set_options(user_input)
+            return True
+
+        # Stöd för diagram/camelCase-version
+        if hasattr(self._selected_strategy, "needMoreInfo") and self._selected_strategy.needMoreInfo():
+            if hasattr(self._selected_strategy, "setDirection"):
+                self._selected_strategy.setDirection(user_input)
             return True
 
         return False
@@ -48,11 +59,40 @@ class InteractionController:
         if self._selected_object is None or self._selected_strategy is None:
             return "No interaction to perform."
 
-        return self._selected_strategy.interact(self._selected_object)
+        # Stöd för snake_case-version
+        if hasattr(self._selected_strategy, "interact"):
+            return self._selected_strategy.interact(self._selected_object)
+
+        # Stöd för diagram/camelCase-version
+        if hasattr(self._selected_strategy, "doIt"):
+            return self._selected_strategy.doIt(self._selected_object)
+
+        return "No interaction to perform."
 
     def cancel_interaction(self):
         self._selected_object = None
         self._selected_strategy = None
+
+    # Alias-metoder för klassdiagrammet
+    def pickGameObject(self, objectName):
+        return self.pick_game_object(objectName)
+
+    def getInteractionTypes(self):
+        return self.get_interaction_types()
+
+    def chooseInteraction(self, interactionType):
+        return self.choose_interaction(interactionType)
+
+    def provideOptions(self, userInput):
+        return self.provide_options(userInput)
+
+    def performInteraction(self):
+        return self.perform_interaction()
+
+    def cancelInteraction(self):
+        self.cancel_interaction()
+
+
 
 
 
